@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — Система управления учебными работами</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        .auth-tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+        .auth-form {
+            display: none;
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .role-selector {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .role-option {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .role-option.selected {
+            border-color: var(--color-primary);
+            background: var(--color-primary);
+            color: white;
+        }
+    </style>
+</head>
+<body class="theme-default">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <h1>Факультет математики и компьютерных наук</h1>
+                </div>
+                <p class="login-subtitle">Система управления учебными работами</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Вход</button>
+                <button class="auth-tab" data-tab="register">Регистрация</button>
+            </div>
+
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="student@test.com" required>
+                    <span id="loginEmailError" class="form-error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Пароль</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required minlength="8">
+                    <span id="loginPasswordError" class="form-error"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                    <span id="loginText">Войти в систему</span>
+                    <span id="loginLoader" class="btn-loader hidden">⏳</span>
+                </button>
+                <div id="loginError" class="alert alert-error hidden">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-text"></span>
+                </div>
+            </form>
+
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label" for="regEmail">Email</label>
+                    <input type="email" id="regEmail" class="form-input" placeholder="email@example.com" required>
+                    <span id="regEmailError" class="form-error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="regPassword">Пароль</label>
+                    <input type="password" id="regPassword" class="form-input" placeholder="••••••••" required minlength="8">
+                    <span id="regPasswordError" class="form-error"></span>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="regLastName">Фамилия</label>
+                        <input type="text" id="regLastName" class="form-input" placeholder="Иванов" required>
+                        <span id="regLastNameError" class="form-error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regFirstName">Имя</label>
+                        <input type="text" id="regFirstName" class="form-input" placeholder="Иван" required>
+                        <span id="regFirstNameError" class="form-error"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="regMiddleName">Отчество</label>
+                    <input type="text" id="regMiddleName" class="form-input" placeholder="Иванович">
+                    <span id="regMiddleNameError" class="form-error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="regFaculty">Факультет</label>
+                    <select id="regFaculty" class="form-select" required>
+                        <option value="">Выберите факультет</option>
+                        <option value="Факультет математики и компьютерных наук">Факультет математики и компьютерных наук</option>
+                        <option value="Факультет международных отношений">Факультет международных отношений</option>
+                        <option value="Факультет журналистики">Факультет журналистики</option>
+                        <option value="Факультет экономики и управления">Факультет экономики и управления</option>
+                        <option value="Медицинский факультет">Медицинский факультет</option>
+                    </select>
+                    <span id="regFacultyError" class="form-error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="regDepartment">Кафедра</label>
+                    <input type="text" id="regDepartment" class="form-input" placeholder="Кафедра информатики" required>
+                    <span id="regDepartmentError" class="form-error"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Роль</label>
+                    <div class="role-selector" id="roleSelector">
+                        <div class="role-option" data-role="student">Студент</div>
+                        <div class="role-option" data-role="teacher">Преподаватель</div>
+                        <div class="role-option" data-role="head_of_department">Зав. кафедрой</div>
+                    </div>
+                    <input type="hidden" id="regRole" value="student">
+                    <span id="regRoleError" class="form-error"></span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="registerBtn">
+                    <span id="registerText">Зарегистрироваться</span>
+                    <span id="registerLoader" class="btn-loader hidden">⏳</span>
+                </button>
+                <div id="registerError" class="alert alert-error hidden">
+                    <span class="alert-icon">⚠️</span>
+                    <span class="alert-text"></span>
+                </div>
+            </form>
+
+            <div class="login-footer">
+                <p class="version">Версия 1.0.0</p>
+                <p class="support">При возникновении проблем обращайтесь в техподдержку</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/services/accessibility.js"></script>
+    <script src="js/services/api.service.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/services/toast.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
